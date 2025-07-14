@@ -6,6 +6,7 @@ import main.SistemaEventos;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -110,7 +111,8 @@ public class SistemaEventosTest {
         sistema.inscreverParticipante(participante1.getCpf(), participante1.getNome(), eventoPequeno.getId());
         assertEquals(0, eventoPequeno.getVagasDisponiveis()); // Vagas esgotadas
 
-        assertThrows(IllegalStateException.class, () -> sistema.inscreverParticipante(participante2.getCpf(), participante2.getNome(), eventoPequeno.getId()));
+        assertThrows(IllegalArgumentException.class, () ->
+                sistema.inscreverParticipante(participante2.getCpf(), participante2.getNome(), eventoPequeno.getId()));
     }
 
     // Testes para US3: Listagem e Gestão de Vagas
@@ -131,7 +133,7 @@ public class SistemaEventosTest {
         // Inicialmente, evento1 tem 100 vagas, evento2 tem 50
         sistema.inscreverParticipante(participante1.getCpf(), participante1.getNome(), evento1.getId()); // 1 vaga ocupada no evento1
 
-        List<Evento> todosEventos = (List<Evento>) sistema.listarTodosEventos();
+        List<Evento> todosEventos = new ArrayList<>(sistema.listarTodosEventos());
 
         Evento evento1Atualizado = todosEventos.stream()
                 .filter(e -> e.getId() == evento1.getId())
